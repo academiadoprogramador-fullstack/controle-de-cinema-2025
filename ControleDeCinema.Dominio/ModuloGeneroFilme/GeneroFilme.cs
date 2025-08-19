@@ -12,6 +12,7 @@ public class GeneroFilme : EntidadeBase<GeneroFilme>
 
     public GeneroFilme(string descricao)
     {
+        Id = Guid.NewGuid();
         Descricao = descricao;
     }
 

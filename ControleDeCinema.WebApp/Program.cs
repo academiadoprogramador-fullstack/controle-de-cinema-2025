@@ -22,6 +22,9 @@ public class Program
         builder.Services.AddScoped<IRepositorioGeneroFilme, RepositorioGeneroFilmeEmOrm>();
 
         builder.Services.AddEntityFrameworkConfig(builder.Configuration);
+        builder.Services.AddIdentityProviderConfig();
+        builder.Services.AddJwtAuthenticationConfig();
+
         builder.Services.AddSerilogConfig(builder.Logging, builder.Configuration);
 
         // Configuração de serviços da Microsoft

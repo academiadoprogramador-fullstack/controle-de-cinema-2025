@@ -13,19 +13,37 @@
         </button>
         <div class="collapse navbar-collapse" id="navbarNav">
             <ul class="navbar-nav gap-2 ms-auto">
-                <li class="nav-item">
-                    <a class="@rotaGenerosFilmeAtiva" asp-controller="GeneroFilme" asp-action="Index">Gêneros de Filme</a>
-                </li>
-                <li class="nav-item">
-                    <a class="@rotaFilmesAtiva" asp-controller="Filme" asp-action="Index">Filmes</a>
-                </li>
-                <li class="nav-item">
-                    <a class="@rotaSalasAtiva" asp-controller="Sala" asp-action="Index">Salas</a>
-                </li>
+                @if (User.IsInRole("Empresa"))
+                {
+                    <li class="nav-item">
+                        <a class="@rotaGenerosFilmeAtiva" asp-controller="GeneroFilme" asp-action="Index">Gêneros de Filme</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="@rotaFilmesAtiva" asp-controller="Filme" asp-action="Index">Filmes</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="@rotaSalasAtiva" asp-controller="Sala" asp-action="Index">Salas</a>
+                    </li>
+                }
+
                 <li class="nav-item">
                     <a class="@rotaSessoesAtiva" asp-controller="Sessao" asp-action="Index">Sessões</a>
                 </li>
             </ul>
+
+            <div class="dropdown ms-5">
+                <button class="btn btn-primary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                    <i class="bi bi-person-circle"></i>
+                    @User.Identity?.Name
+                </button>
+                <ul class="dropdown-menu">
+                    <li>
+                        <form asp-controller="Autenticacao" asp-action="Logout">
+                            <button class="dropdown-item" href="#">Logout</button>
+                        </form>
+                    </li>
+                </ul>
+            </div>
         </div>
     </div>
 </nav>
