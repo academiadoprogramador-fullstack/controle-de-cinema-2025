@@ -61,4 +61,28 @@ public sealed class RepositorioGeneroFilmeEmOrmTests : TestFixture
         Assert.IsTrue(conseguiuExcluir);
         Assert.IsNull(generoSelecionado);
     }
+
+    [TestMethod]
+    public void Deve_Selecionar_GenerosFilme_Corretamente()
+    {
+        // Arrange
+        var genero = new GeneroFilme("Ficção Científica");
+        var genero2 = new GeneroFilme("Drama");
+        var genero3 = new GeneroFilme("Animação");
+        
+        List<GeneroFilme> generosEsperados = [genero, genero2, genero3];
+
+        repositorioGeneroFilme?.CadastrarEntidades(generosEsperados);
+        dbContext?.SaveChanges();
+
+        var generosEsperadosOrdenados = generosEsperados
+            .OrderBy(g => g.Descricao)
+            .ToList();
+
+        // Act
+        var generosRecebidos = repositorioGeneroFilme?.SelecionarRegistros();
+
+        // Assert
+        CollectionAssert.AreEqual(generosEsperadosOrdenados, generosRecebidos);
+    }
 }
