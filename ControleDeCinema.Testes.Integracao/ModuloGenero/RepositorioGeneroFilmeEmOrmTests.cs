@@ -17,9 +17,9 @@ public sealed class RepositorioGeneroFilmeEmOrmTests : TestFixture
         dbContext?.SaveChanges();
 
         // Assert
-        var generoEncontrado = repositorioGeneroFilme?.SelecionarRegistroPorId(genero.Id);
+        var generoSelecionado = repositorioGeneroFilme?.SelecionarRegistroPorId(genero.Id);
 
-        Assert.AreEqual(genero, generoEncontrado);
+        Assert.AreEqual(genero, generoSelecionado);
     }
 
     [TestMethod]
@@ -41,5 +41,24 @@ public sealed class RepositorioGeneroFilmeEmOrmTests : TestFixture
 
         Assert.IsTrue(conseguiuEditar);
         Assert.AreEqual(genero, generoEncontrado);
+    }
+
+    [TestMethod]
+    public void Deve_Excluir_GeneroFilme_Corretamente()
+    {
+        // Arrange
+        var genero = new GeneroFilme("Terror");
+        repositorioGeneroFilme?.Cadastrar(genero);
+        dbContext?.SaveChanges();
+
+        // Act
+        var conseguiuExcluir = repositorioGeneroFilme?.Excluir(genero.Id);
+        dbContext?.SaveChanges();
+
+        // Assert
+        var generoSelecionado = repositorioGeneroFilme?.SelecionarRegistroPorId(genero.Id);
+
+        Assert.IsTrue(conseguiuExcluir);
+        Assert.IsNull(generoSelecionado);
     }
 }
