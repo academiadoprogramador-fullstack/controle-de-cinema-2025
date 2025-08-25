@@ -6,14 +6,17 @@
     var notificacao = ViewData[nameof(NotificacaoViewModel)] as NotificacaoViewModel;
 }
 
-<p>
-    <a class="btn btn-primary px-4" asp-action="Cadastrar" data-se="btnCadastrar">
-        <i class="bi bi-plus"></i>
-        Cadastrar Novo/a
-    </a>
-</p>
+@if (User.IsInRole("Empresa"))
+{
+    <p>
+        <a class="btn btn-primary px-4" asp-action="Cadastrar" data-se="btnCadastrar">
+            <i class="bi bi-plus"></i>
+            Cadastrar Novo/a
+        </a>
+    </p>
 
-<hr />
+    <hr />
+}
 
 @if (notificacao is not null)
 {
