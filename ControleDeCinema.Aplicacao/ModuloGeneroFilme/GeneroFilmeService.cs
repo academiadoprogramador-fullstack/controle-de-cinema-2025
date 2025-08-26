@@ -1,7 +1,6 @@
 ﻿using ControledeCinema.Dominio.Compartilhado;
 using ControleDeCinema.Aplicacao.Compartilhado;
 using ControleDeCinema.Dominio.ModuloAutenticacao;
-using ControleDeCinema.Dominio.ModuloFilme;
 using ControleDeCinema.Dominio.ModuloGeneroFilme;
 using FluentResults;
 using Microsoft.Extensions.Logging;

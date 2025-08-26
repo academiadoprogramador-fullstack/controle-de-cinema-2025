@@ -1,7 +1,6 @@
 ﻿using ControleDeCinema.Aplicacao.ModuloFilme;
 using ControleDeCinema.Aplicacao.ModuloSala;
 using ControleDeCinema.Aplicacao.ModuloSessao;
-using ControleDeCinema.Dominio.ModuloSessao;
 using ControleDeCinema.WebApp.Extensions;
 using ControleDeCinema.WebApp.Models;
 using Microsoft.AspNetCore.Authorization;
