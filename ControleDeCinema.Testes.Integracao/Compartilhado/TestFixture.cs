@@ -52,6 +52,7 @@ public abstract class TestFixture
         ConfigurarTabelas(dbContext);
 
         repositorioGeneroFilme = new RepositorioGeneroFilmeEmOrm(dbContext);
+        repositorioSala = new RepositorioSalaEmOrm(dbContext);
 
         BuilderSetup.SetCreatePersistenceMethod<GeneroFilme>(repositorioGeneroFilme.Cadastrar);
         BuilderSetup.SetCreatePersistenceMethod<IList<GeneroFilme>>(repositorioGeneroFilme.CadastrarEntidades);

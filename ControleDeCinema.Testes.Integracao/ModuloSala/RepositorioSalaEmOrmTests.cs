@@ -51,7 +51,7 @@ namespace ControleDeCinema.Testes.Integracao.ModuloSala
             var salaEncontrada = repositorioSala?.SelecionarRegistroPorId(sala.Id);
 
             Assert.IsTrue(conseguiuEditar);
-            Assert.AreEqual(sala, salaEditada);
+            Assert.AreEqual(sala, salaEncontrada);
         }
 
         [TestMethod]
@@ -80,9 +80,9 @@ namespace ControleDeCinema.Testes.Integracao.ModuloSala
         public void Deve_Selecionar_Sala_Corretamente()
         {
             // Arrange
-            var sala = new Sala {Numero = 1, Capacidade = 100 };
-            var sala1 = new Sala { Numero = 2, Capacidade = 50 };
-            var sala2 = new Sala { Numero = 3, Capacidade = 75 };
+            var sala = new Sala(1, 100);
+            var sala1 = new Sala(2, 50);
+            var sala2 = new Sala(3, 75);
 
             List<Sala> salasEsperadas = [sala, sala1, sala2];
 
@@ -96,8 +96,12 @@ namespace ControleDeCinema.Testes.Integracao.ModuloSala
             // Act
             var salasRecebidas = repositorioSala?.SelecionarRegistros();
 
+            var salasRecebidasOrdenadas = salasRecebidas!
+                .OrderBy(s => s.Numero)
+                .ToList();
+
             // Assert
-            CollectionAssert.AreEqual(salasEsperadasOrdenadas, salasRecebidas);
+            CollectionAssert.AreEqual(salasEsperadasOrdenadas, salasRecebidasOrdenadas);
         }
     }
 
