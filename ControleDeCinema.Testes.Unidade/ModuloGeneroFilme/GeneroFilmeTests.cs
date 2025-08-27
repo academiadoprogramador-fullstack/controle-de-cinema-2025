@@ -20,6 +20,7 @@ namespace ControleDeCinema.Testes.Unidade.ModuloGeneroFilme
             // Act
             genero.AdicionarFilme(filme);
 
+            // Assert
             var generoContemFilme = genero.Filmes.Contains(filme);
 
             Assert.IsTrue(generoContemFilme);
