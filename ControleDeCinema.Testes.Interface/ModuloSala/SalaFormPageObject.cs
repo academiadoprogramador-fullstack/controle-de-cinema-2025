@@ -15,12 +15,15 @@ public class SalaFormPageObject
 
         wait = new WebDriverWait(driver, TimeSpan.FromSeconds(10));
 
-        wait.Until(d => d.FindElement(By.CssSelector("form[data-se='formPrincipal']")).Displayed);
+        wait.Until(d => 
+            d.FindElement(By.CssSelector("form[data-se='formPrincipal']")).Displayed &&
+            d.FindElement(By.CssSelector("form[data-se='formPrincipal']")).Enabled
+        );
     }
 
     public SalaFormPageObject PreencherNumero(string numero)
     {
-        var inputNumero = driver?.FindElement(By.Id("Numero"));
+        var inputNumero = wait.Until(d => d.FindElement(By.Id("Numero")));
         inputNumero?.Clear();
         inputNumero?.SendKeys(numero);
 
@@ -29,7 +32,7 @@ public class SalaFormPageObject
 
     public SalaFormPageObject PreencherCapacidade(string capacidade)
     {
-        var inputCapacidade = driver?.FindElement(By.Id("Capacidade"));
+        var inputCapacidade = wait.Until(d => d.FindElement(By.Id("Capacidade")));
         inputCapacidade?.Clear();
         inputCapacidade?.SendKeys(capacidade);
 

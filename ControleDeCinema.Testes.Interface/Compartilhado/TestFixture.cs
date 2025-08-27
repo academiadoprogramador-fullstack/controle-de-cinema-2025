@@ -48,8 +48,6 @@ public abstract class TestFixture
         await InicializarAplicacaoAsync();
 
         await InicializarWebDriverAsync();
-
-        RegistrarContaEmpresarial();
     }
 
     [AssemblyCleanup]
@@ -60,8 +58,6 @@ public abstract class TestFixture
         await EncerrarAplicacaoAsync();
 
         await EncerrarBancoDadosAsync();
-
-        driver?.Manage().Cookies.DeleteAllCookies();
     }
 
     [TestInitialize]
@@ -79,11 +75,17 @@ public abstract class TestFixture
     {
         dbContext.Database.EnsureCreated();
 
+        // Apagar dados das tabelas
         dbContext.Sessoes.RemoveRange(dbContext.Sessoes);
         dbContext.Ingressos.RemoveRange(dbContext.Ingressos);
         dbContext.Filmes.RemoveRange(dbContext.Filmes);
         dbContext.GenerosFilme.RemoveRange(dbContext.GenerosFilme);
         dbContext.Salas.RemoveRange(dbContext.Salas);
+
+        // Apagar dados dos usuários
+        dbContext.UserRoles.RemoveRange(dbContext.UserRoles);
+        dbContext.Users.RemoveRange(dbContext.Users);
+        dbContext.Roles.RemoveRange(dbContext.Roles);
 
         dbContext.SaveChanges();
     }
@@ -186,12 +188,16 @@ public abstract class TestFixture
         if (driver is null)
             throw new ArgumentNullException(nameof(driver));
 
-        driver.Navigate().GoToUrl($"{enderecoBase}/autenticacao/registro");
+        driver.Manage().Cookies.DeleteAllCookies();
 
-        var inputEmail = driver.FindElement(By.Id("Email"));
-        var inputSenha = driver.FindElement(By.Id("Senha"));
-        var inputConfirmarSenha = driver.FindElement(By.Id("ConfirmarSenha"));
-        var selectTipoUsuario = new SelectElement(driver.FindElement(By.Id("Tipo")));
+        driver.Navigate().GoToUrl($"{enderecoBase}/autenticacao/registro");
+        
+        var wait = new WebDriverWait(driver, TimeSpan.FromSeconds(30));
+
+        var inputEmail = wait.Until(d => d.FindElement(By.Id("Email")));
+        var inputSenha = wait.Until(d => d.FindElement(By.Id("Senha")));
+        var inputConfirmarSenha = wait.Until(d => d.FindElement(By.Id("ConfirmarSenha")));
+        var selectTipoUsuario = new SelectElement(wait.Until(d => d.FindElement(By.Id("Tipo"))));
 
         inputEmail.Clear();
         inputEmail.SendKeys("empresa@dominio.com");
@@ -204,11 +210,9 @@ public abstract class TestFixture
 
         selectTipoUsuario.SelectByText("Empresa");
 
-        var wait = new WebDriverWait(driver, TimeSpan.FromSeconds(20));
-
         wait.Until(d =>
         {
-            IWebElement btn = d.FindElement(By.CssSelector("button[type='submit']"));
+            var btn = d.FindElement(By.CssSelector("button[type='submit']"));
 
             if (!btn.Enabled || !btn.Displayed) return false;
 
@@ -217,6 +221,11 @@ public abstract class TestFixture
             return true;
         });
 
-        wait.Until(d => !d.Url.Contains("/autenticacao/registro", StringComparison.OrdinalIgnoreCase));
+        wait.Until(d =>
+                    !d.Url.Contains("/autenticacao/registro", StringComparison.OrdinalIgnoreCase) &&
+                    d.FindElements(By.CssSelector("form[action='/autenticacao/registro']")).Count == 0
+                );
+
+        wait.Until(d => d.FindElements(By.CssSelector("form[action='/autenticacao/logout']")).Count > 0);
     }
 }
