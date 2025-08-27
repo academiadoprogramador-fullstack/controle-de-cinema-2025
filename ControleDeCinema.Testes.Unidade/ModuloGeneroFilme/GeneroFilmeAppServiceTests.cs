@@ -58,4 +58,28 @@ public sealed class GeneroFilmeAppServiceTests
         Assert.IsNotNull(resultado);
         Assert.IsTrue(resultado.IsSuccess);
     }
+
+    [TestMethod]
+    public void Cadastrar_DeveRetornarFalha_QuandoCampoObrigatorioForVazio()
+    {
+        // Arrange
+        var genero = new GeneroFilme("");
+
+        var generoTeste = new GeneroFilme("Terror");
+
+        repositorioGeneroFilmeMock?
+            .Setup(r => r.SelecionarRegistros())
+            .Returns(new List<GeneroFilme>() { generoTeste });
+
+        // Act
+        var resultado = generoFilmeAppService?.Cadastrar(genero);
+
+        // Assert
+        repositorioGeneroFilmeMock?.Verify(r => r.Cadastrar(genero), Times.Never);
+        
+        unitOfWorkMock?.Verify(u => u.Commit(), Times.Never);
+
+        Assert.IsNotNull(resultado);
+        Assert.IsTrue(resultado.IsFailed);
+    }
 }
