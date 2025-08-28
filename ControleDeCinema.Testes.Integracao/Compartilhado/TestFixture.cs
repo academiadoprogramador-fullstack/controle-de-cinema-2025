@@ -1,6 +1,8 @@
+using ControleDeCinema.Dominio.ModuloFilme;
 using ControleDeCinema.Dominio.ModuloGeneroFilme;
 using ControleDeCinema.Dominio.ModuloSala;
 using ControleDeCinema.Infraestrutura.Orm.Compartilhado;
+using ControleDeCinema.Infraestrutura.Orm.ModuloFilme;
 using ControleDeCinema.Infraestrutura.Orm.ModuloGeneroFilme;
 using ControleDeCinema.Infraestrutura.Orm.ModuloSala;
 using DotNet.Testcontainers.Containers;
@@ -17,6 +19,8 @@ public abstract class TestFixture
     protected RepositorioGeneroFilmeEmOrm? repositorioGeneroFilme;
 
     protected RepositorioSalaEmOrm? repositorioSala;
+
+    protected RepositorioFilmeEmOrm? repositorioFilme;
 
     private static IDatabaseContainer? container;
 
@@ -53,11 +57,14 @@ public abstract class TestFixture
 
         repositorioGeneroFilme = new RepositorioGeneroFilmeEmOrm(dbContext);
         repositorioSala = new RepositorioSalaEmOrm(dbContext);
+        repositorioFilme = new RepositorioFilmeEmOrm(dbContext);
 
         BuilderSetup.SetCreatePersistenceMethod<GeneroFilme>(repositorioGeneroFilme.Cadastrar);
         BuilderSetup.SetCreatePersistenceMethod<IList<GeneroFilme>>(repositorioGeneroFilme.CadastrarEntidades);
         BuilderSetup.SetCreatePersistenceMethod<Sala>(repositorioSala!.Cadastrar);
         BuilderSetup.SetCreatePersistenceMethod<IList<Sala>>(repositorioSala.CadastrarEntidades);
+        BuilderSetup.SetCreatePersistenceMethod<Filme>(repositorioFilme!.Cadastrar);
+        BuilderSetup.SetCreatePersistenceMethod<IList<Filme>>(repositorioFilme.CadastrarEntidades);
 
     }
 
@@ -68,6 +75,8 @@ public abstract class TestFixture
         dbContext.GenerosFilme.RemoveRange(dbContext.GenerosFilme);
 
         dbContext.Salas.RemoveRange(dbContext.Salas);
+        
+        dbContext.Filmes.RemoveRange(dbContext.Filmes);
 
         dbContext.SaveChanges();
     }

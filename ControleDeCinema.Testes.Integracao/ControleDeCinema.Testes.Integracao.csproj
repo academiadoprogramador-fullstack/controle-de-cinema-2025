@@ -9,12 +9,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Compile Remove="ModuloFilme\**" />
-    <EmbeddedResource Remove="ModuloFilme\**" />
-    <None Remove="ModuloFilme\**" />
-  </ItemGroup>
-
-  <ItemGroup>
     <PackageReference Include="DotNet.Testcontainers" Version="1.6.0" />
     <PackageReference Include="Microsoft.Extensions.Configuration.UserSecrets" Version="6.0.1" />
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.12.0" />
