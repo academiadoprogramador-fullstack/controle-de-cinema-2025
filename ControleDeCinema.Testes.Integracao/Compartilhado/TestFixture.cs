@@ -1,10 +1,12 @@
 using ControleDeCinema.Dominio.ModuloFilme;
 using ControleDeCinema.Dominio.ModuloGeneroFilme;
 using ControleDeCinema.Dominio.ModuloSala;
+using ControleDeCinema.Dominio.ModuloSessao;
 using ControleDeCinema.Infraestrutura.Orm.Compartilhado;
 using ControleDeCinema.Infraestrutura.Orm.ModuloFilme;
 using ControleDeCinema.Infraestrutura.Orm.ModuloGeneroFilme;
 using ControleDeCinema.Infraestrutura.Orm.ModuloSala;
+using ControleDeCinema.Infraestrutura.Orm.ModuloSessao;
 using DotNet.Testcontainers.Containers;
 using FizzWare.NBuilder;
 using Testcontainers.PostgreSql;
@@ -21,6 +23,8 @@ public abstract class TestFixture
     protected RepositorioSalaEmOrm? repositorioSala;
 
     protected RepositorioFilmeEmOrm? repositorioFilme;
+
+    protected RepositorioSessaoEmOrm? repositorioSessao;
 
     private static IDatabaseContainer? container;
 
@@ -58,6 +62,7 @@ public abstract class TestFixture
         repositorioGeneroFilme = new RepositorioGeneroFilmeEmOrm(dbContext);
         repositorioSala = new RepositorioSalaEmOrm(dbContext);
         repositorioFilme = new RepositorioFilmeEmOrm(dbContext);
+        repositorioSessao = new RepositorioSessaoEmOrm(dbContext);
 
         BuilderSetup.SetCreatePersistenceMethod<GeneroFilme>(repositorioGeneroFilme.Cadastrar);
         BuilderSetup.SetCreatePersistenceMethod<IList<GeneroFilme>>(repositorioGeneroFilme.CadastrarEntidades);
@@ -65,6 +70,9 @@ public abstract class TestFixture
         BuilderSetup.SetCreatePersistenceMethod<IList<Sala>>(repositorioSala.CadastrarEntidades);
         BuilderSetup.SetCreatePersistenceMethod<Filme>(repositorioFilme!.Cadastrar);
         BuilderSetup.SetCreatePersistenceMethod<IList<Filme>>(repositorioFilme.CadastrarEntidades);
+        BuilderSetup.SetCreatePersistenceMethod<Sessao>(repositorioSessao!.Cadastrar);
+        BuilderSetup.SetCreatePersistenceMethod<IList<Sessao>>(repositorioSessao.CadastrarEntidades);
+
 
     }
 
@@ -77,6 +85,8 @@ public abstract class TestFixture
         dbContext.Salas.RemoveRange(dbContext.Salas);
         
         dbContext.Filmes.RemoveRange(dbContext.Filmes);
+        
+        dbContext.Sessoes.RemoveRange(dbContext.Sessoes);
 
         dbContext.SaveChanges();
     }
